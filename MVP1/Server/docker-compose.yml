@@ -2,6 +2,7 @@ version: '3'
 
 services:
   api:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,6 +12,12 @@ services:
       - mongo
 
   mongo:
-    image: "mongo:latest"
+    restart: unless-stopped
+    image: "mongo:6.0"
     ports:
       - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
