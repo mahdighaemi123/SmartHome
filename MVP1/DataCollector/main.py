@@ -40,7 +40,7 @@ def main():
 
         displayer.clear()
         displayer.display_line(f"Wheather:{('Raining' if is_raining else 'No Rain')}" ,0)
-        displayer.display_line(f"Temp    :{temp:.2f}°",1)
+        displayer.display_line(f"Temp    :{temp:.2f}c",1)
         displayer.display_line(f"Humidity:{humidity:.2f}%",2)
         displayer.show()
 
