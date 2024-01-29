@@ -1,4 +1,5 @@
 version: '3'
+name: smart-home-mvp-1
 
 services:
   api:
