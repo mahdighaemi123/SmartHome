@@ -5,7 +5,7 @@ from main_config import MainConfig
 class NetworkServiceConfig(Config):
     name = "NetworkService"
     source_name = f"{MainConfig.device_name}"
-    ssid = "<YOUR_WIFI_PASSWORD>"
+    ssid = "<YOUR_WIFI_NAME>"
     password = "<YOUR_WIFI_PASSWORD>"
     max_try = 3
     request_timeout = 12

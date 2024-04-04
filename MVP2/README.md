@@ -74,7 +74,7 @@ We have three main-part with micro-service architecture
 1. Edit config.py in DISPLAY_SERVER/Network/config.py:
 ```
 class NetworkServiceConfig(Config):
-    ssid = "<YOUR_WIFI_PASSWORD>"
+    ssid = "<YOUR_WIFI_NAME>"
     password = "<YOUR_WIFI_PASSWORD>"
 ```
 
@@ -94,7 +94,7 @@ class GetwayServiceConfig(Config):
 1. Edit config.py in DATA_COLLECTOR/Network/config.py:
 ```
 class NetworkServiceConfig(Config):
-    ssid = "<YOUR_WIFI_PASSWORD>"
+    ssid = "<YOUR_WIFI_NAME>"
     password = "<YOUR_WIFI_PASSWORD>"
 ```
 
