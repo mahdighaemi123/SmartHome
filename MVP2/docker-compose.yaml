@@ -1,0 +1,124 @@
+version: '3.8'
+name: smarthome-mvp2
+
+services:
+  services_getway:
+    build: ./SERVICES_GETWAY/
+    ports:
+      - "6001:6001"
+
+    environment:
+      PORT: 6001
+      RainPredictionServer: http://rain_prediction_server:6002
+      DataKeeper: http://data_keeper:6003
+      LightIntensityKeeper: http://light_intensity_keeper:6004
+      TempKeeper: http://temp_keeper:6005
+      HumidityKeeper: http://humidity_keeper:6006
+      RainStatusKeeper: http://rain_status_keeper:6007
+      DeviceStatusKeeper: http://device_status_keeper:6008
+      DateTimeServer: http://date_time_server:6009
+      DisplayServer: http://192.168.31.229:8080
+
+    depends_on:
+      - rain_prediction_server
+      - data_keeper
+      - light_intensity_keeper
+      - temp_keeper
+      - humidity_keeper
+      - rain_status_keeper
+      - device_status_keeper
+      - date_time_server
+
+  rain_prediction_server:
+    build: ./RAIN_PREDICTION_SERVER/
+    ports:
+      - "6002:6002"
+    environment:
+      PORT: 6002
+
+  data_keeper:
+    build: ./DATA_KEEPER/
+    ports:
+      - "6003:6003"
+    environment:
+      PORT: 6003
+      MONGODB_CONNECTION_STRING: mongodb://mongo:27017/
+    depends_on:
+      - mongo
+
+  light_intensity_keeper:
+    build: ./LIGHT_INTENSITY_KEEPER/
+    ports:
+      - "6004:6004"
+    environment:
+      PORT: 6004
+      GETWAY: http://services_getway:6001/
+
+    depends_on:
+      - data_keeper
+
+  temp_keeper:
+    build: ./TEMP_KEEPER/
+    ports:
+      - "6005:6005"
+    environment:
+      PORT: 6005
+      GETWAY: http://services_getway:6001/
+    depends_on:
+      - data_keeper
+
+  humidity_keeper:
+    build: ./HUMIDITY_KEEPER/
+    ports:
+      - "6006:6006"
+    environment:
+      PORT: 6006
+      GETWAY: http://services_getway:6001/
+    depends_on:
+      - data_keeper
+
+  rain_status_keeper:
+    build: ./RAIN_STATUS_KEEPER/
+    ports:
+      - "6007:6007"
+    environment:
+      PORT: 6007
+      GETWAY: http://services_getway:6001/
+    depends_on:
+      - data_keeper
+
+  device_status_keeper:
+    build: ./DEVICE_STATUS_KEEPER/
+    ports:
+      - "6008:6008"
+    environment:
+      PORT: 6008
+      GETWAY: http://services_getway:6001/
+    depends_on:
+      - data_keeper
+
+  date_time_server:
+    build: ./DATE_TIME_SERVER/
+    ports:
+      - "6009:6009"
+    environment:
+      PORT: 6009
+
+  monitor:
+    build: ./MONITOR/
+    environment:
+      GETWAY: http://services_getway:6001/
+    depends_on:
+      - services_getway
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+    driver: local
