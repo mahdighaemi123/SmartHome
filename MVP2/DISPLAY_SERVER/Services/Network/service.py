@@ -37,6 +37,7 @@ class NetworkService(Service,Singleton):
         if self.is_connected():
             return
 
+        sleep(1)
         self.station.connect(self.ssid, self.password)
         sleep(1)
 
