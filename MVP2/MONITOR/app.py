@@ -38,4 +38,4 @@ while True:
     lines.append(f'Rain:{"Now" if status["rain_status"] else ""}{"," if status["tomorrow_rain_status_prediction"] and status["rain_status"] else ""}{"24h" if status["tomorrow_rain_status_prediction"] else ""}{"No-Rain" if not status["tomorrow_rain_status_prediction"] and not status["rain_status"] else ""} Sun:{status["light_intensity"]//1000+"K" if status["light_intensity"] >= 1000 else round(status["light_intensity"])}')
 
     displayServer.display(lines=lines)
-    time.sleep(0.1)
+    time.sleep(0.720)
