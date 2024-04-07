@@ -9,9 +9,9 @@ import network
 import urequests
 
 
-class NetworkService(Service,Singleton):
+class NetworkService(Service, Singleton):
 
-    def init(self,name,source_name, ssid, password,request_timeout, max_try=3):
+    def init(self, name, source_name, ssid, password, request_timeout, max_try=3):
         self.name = name
         self.source_name = source_name
 
@@ -26,7 +26,10 @@ class NetworkService(Service,Singleton):
         self.loggerService = LoggerService()
 
     def loop(self):
-        self.connect()
+        try:
+            self.connect()
+        except Exception as e:
+            print("ERROR wifi connect", e)
 
     def is_connected(self):
         return self.station is not None and self.station.isconnected()
@@ -39,7 +42,12 @@ class NetworkService(Service,Singleton):
 
         sleep(1)
         self.station.connect(self.ssid, self.password)
-        sleep(1)
+
+        for i in range(10):
+            sleep(1)
+            print(f"[{i}] wait to connect wifi")
+            if self.is_connected():
+                return
 
     def wait_for_connection(self):
         try_count = 0
@@ -52,15 +60,15 @@ class NetworkService(Service,Singleton):
 
         return True
 
-
     def post_request(self, url, data):
 
         if not self.is_connected():
             return -1, None
-        
+
         try:
-            response = urequests.post(url, json=data,timeout=self.request_timeout)
+            response = urequests.post(
+                url, json=data, timeout=self.request_timeout)
             return response.status_code, response.text
         except Exception as e:
-            print("ERROR POST:",e)
+            print("ERROR POST:", e)
             return -1, None
